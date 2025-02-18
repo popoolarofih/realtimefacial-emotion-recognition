@@ -1,12 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
+
 /* Global Styles */
 body {
   margin: 0;
-  font-family: 'Roboto', sans-serif;
-  background: #1f1f1f;
-  color: #f0f0f0;
+  font-family: 'Montserrat', sans-serif;
+  background: #fff; /* White background */
+  color: #333;
 }
 
-/* Overall app container */
+/* Header */
+.app-header {
+  background: #2a9d8f; /* Cool teal */
+  padding: 15px 0;
+  text-align: center;
+  color: #fff;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+}
+
+/* App container */
 .myapp {
   max-width: 960px;
   margin: 40px auto;
@@ -14,40 +29,40 @@ body {
   text-align: center;
 }
 
-/* Heading style with a fade-in effect */
-.myapp h1 {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-  color: #e0e0e0;
-  animation: fadeIn 1s ease-in;
+/* Project description */
+.project-description {
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  line-height: 1.6;
+  color: #555;
 }
 
-/* Container for video and canvas overlay */
+/* Video container styling */
 .video-container {
   position: relative;
   width: 100%;
   max-width: 940px;
   margin: 0 auto;
-  border: 1px solid #444;
-  border-radius: 8px;
+  border: 2px solid #e9c46a; /* Accent color */
+  border-radius: 10px;
   overflow: hidden;
-  background: #000;
+  background: #f0f0f0;
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .video-container:hover {
   transform: scale(1.02);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* Video styling */
+/* Video element */
 .video-container video {
   width: 100%;
   height: auto;
   display: block;
 }
 
-/* Canvas overlay styling */
+/* Canvas overlay */
 .appcanvas {
   position: absolute;
   top: 0;
@@ -57,21 +72,32 @@ body {
   pointer-events: none;
 }
 
-/* Toggle Button Styling */
-.toggle-btn {
+/* Buttons container */
+.buttons {
   margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* Button styles */
+.toggle-btn,
+.snapshot-btn {
   padding: 10px 20px;
   font-size: 1rem;
   color: #fff;
-  background: #333;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
   transition: background 0.3s, transform 0.2s;
 }
 
+.toggle-btn {
+  background: #264653; /* Deep blue */
+}
+
 .toggle-btn:hover {
-  background: #555;
+  background: #1d3557;
   transform: scale(1.05);
 }
 
@@ -79,22 +105,63 @@ body {
   transform: scale(0.98);
 }
 
-/* Responsive design */
+.snapshot-btn {
+  background: #e76f51; /* Warm coral */
+}
+
+.snapshot-btn:hover {
+  background: #d65a3b;
+  transform: scale(1.05);
+}
+
+.snapshot-btn:active {
+  transform: scale(0.98);
+}
+
+/* Snapshot container */
+.snapshot-container {
+  margin-top: 30px;
+  padding: 20px;
+  border: 2px solid #2a9d8f;
+  border-radius: 10px;
+  background: #f9f9f9;
+}
+
+.snapshot-container h2 {
+  margin-bottom: 15px;
+  color: #2a9d8f;
+}
+
+.snapshot-img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Footer */
+.app-footer {
+  background: #264653;
+  padding: 15px 0;
+  text-align: center;
+  color: #fff;
+  margin-top: 40px;
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .myapp {
     padding: 10px;
   }
-  .myapp h1 {
+  .app-header h1 {
     font-size: 2rem;
   }
-  .toggle-btn {
+  .project-description {
+    font-size: 1rem;
+  }
+  .toggle-btn,
+  .snapshot-btn {
     font-size: 0.9rem;
     padding: 8px 16px;
   }
-}
-
-/* Fade-in keyframes for the heading */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }

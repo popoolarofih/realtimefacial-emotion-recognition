@@ -7,12 +7,12 @@ function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const detectionIntervalRef = useRef<number | null>(null);
   const [isDetecting, setIsDetecting] = useState(true);
+  const [snapshot, setSnapshot] = useState<string | null>(null);
 
   useEffect(() => {
     startVideo();
     loadModels();
     return () => {
-      // Clear the detection interval when component unmounts
       if (detectionIntervalRef.current) {
         clearInterval(detectionIntervalRef.current);
       }
@@ -27,12 +27,10 @@ function App() {
           videoRef.current.srcObject = currentStream;
         }
       })
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch((err) => console.error(err));
   };
 
-  // Load models from face-api.js
+  // Load face-api.js models
   const loadModels = () => {
     Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
@@ -40,13 +38,11 @@ function App() {
       faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
       faceapi.nets.faceExpressionNet.loadFromUri("/models")
     ]).then(() => {
-      if (isDetecting) {
-        startDetection();
-      }
+      if (isDetecting) startDetection();
     });
   };
 
-  // Start face detection and drawing results on the canvas
+  // Start face detection on a set interval
   const startDetection = () => {
     detectionIntervalRef.current = window.setInterval(async () => {
       if (videoRef.current && canvasRef.current) {
@@ -57,38 +53,31 @@ function App() {
           .withFaceLandmarks()
           .withFaceExpressions();
 
-        // Use the actual video dimensions for display size
         const displaySize = {
           width: videoRef.current.videoWidth,
           height: videoRef.current.videoHeight
         };
         faceapi.matchDimensions(canvasRef.current, displaySize);
-
         const resizedDetections = faceapi.resizeResults(detections, displaySize);
-
         const context = canvasRef.current.getContext('2d');
         if (context) {
           context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+          faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
+          faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
+          faceapi.draw.drawFaceExpressions(canvasRef.current, resizedDetections);
         }
-
-        faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
-        faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
-        faceapi.draw.drawFaceExpressions(canvasRef.current, resizedDetections);
       }
     }, 1000);
   };
 
-  // Stop the face detection
+  // Stop face detection
   const stopDetection = () => {
     if (detectionIntervalRef.current) {
       clearInterval(detectionIntervalRef.current);
       detectionIntervalRef.current = null;
-      // Clear the canvas when detection is paused
       if (canvasRef.current) {
         const context = canvasRef.current.getContext('2d');
-        if (context) {
-          context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-        }
+        if (context) context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
       }
     }
   };
@@ -104,23 +93,60 @@ function App() {
     }
   };
 
+  // Capture a snapshot from the video feed
+  const takeSnapshot = () => {
+    if (videoRef.current) {
+      const video = videoRef.current;
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = video.videoWidth;
+      tempCanvas.height = video.videoHeight;
+      const tempCtx = tempCanvas.getContext('2d');
+      if (tempCtx) {
+        tempCtx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+        const dataUrl = tempCanvas.toDataURL('image/png');
+        setSnapshot(dataUrl);
+      }
+    }
+  };
+
   return (
-    <div className="myapp">
-      <h1>RealTime Facial Emotion Detection System</h1>
-      <div className="video-container">
-        <video
-          crossOrigin="anonymous"
-          ref={videoRef}
-          autoPlay
-          muted
-          playsInline
-        ></video>
-        <canvas ref={canvasRef} className="appcanvas" />
+    <>
+      <header className="app-header">
+        <h1>Realtime Facial Emotion Recognition System</h1>
+      </header>
+      <div className="myapp">
+        <p className="project-description">
+          Welcome to our Realtime Facial Emotion Recognition project! Using CNN, this app detects faces, landmarks, and expressions in real-time from your webcam. Toggle detection on/off and capture snapshots of the live feed to explore this cool experiment with modern web technologies.
+        </p>
+        <div className="video-container">
+          <video
+            crossOrigin="anonymous"
+            ref={videoRef}
+            autoPlay
+            muted
+            playsInline
+          ></video>
+          <canvas ref={canvasRef} className="appcanvas" />
+        </div>
+        <div className="buttons">
+          <button className="toggle-btn" onClick={toggleDetection}>
+            {isDetecting ? "Pause Detection" : "Start Detection"}
+          </button>
+          <button className="snapshot-btn" onClick={takeSnapshot}>
+            Take Snapshot
+          </button>
+        </div>
+        {snapshot && (
+          <div className="snapshot-container">
+            <h2>Snapshot</h2>
+            <img src={snapshot} alt="Snapshot" className="snapshot-img" />
+          </div>
+        )}
       </div>
-      <button className="toggle-btn" onClick={toggleDetection}>
-        {isDetecting ? "Pause Detection" : "Start Detection"}
-      </button>
-    </div>
+      <footer className="app-footer">
+        <p>&copy; {new Date().getFullYear()} Executive Tech. All rights reserved.</p>
+      </footer>
+    </>
   );
 }
 
