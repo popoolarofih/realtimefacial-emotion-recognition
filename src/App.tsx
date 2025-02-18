@@ -106,7 +106,7 @@ function App() {
 
   return (
     <div className="myapp">
-      <h1>Face Detection</h1>
+      <h1>RealTime Facial Emotion Detection System</h1>
       <div className="video-container">
         <video
           crossOrigin="anonymous"
