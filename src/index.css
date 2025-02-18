@@ -1,68 +1,69 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
 
-/* Global Styles */
 body {
   margin: 0;
   font-family: 'Montserrat', sans-serif;
-  background: #fff; /* White background */
+  background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
   color: #333;
 }
 
 /* Header */
 .app-header {
-  background: #2a9d8f; /* Cool teal */
-  padding: 15px 0;
+  background: linear-gradient(90deg, #2a9d8f, #264653);
+  padding: 20px 0;
   text-align: center;
   color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .app-header h1 {
   margin: 0;
-  font-size: 2.5rem;
+  font-size: 2.8rem;
+  letter-spacing: 1px;
 }
 
-/* App container */
+/* Main App Container */
 .myapp {
-  max-width: 960px;
-  margin: 40px auto;
+  max-width: 1000px;
+  margin: 50px auto;
   padding: 20px;
-  text-align: center;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
 }
 
-/* Project description */
+/* Project Description */
 .project-description {
-  font-size: 1.1rem;
-  margin-bottom: 30px;
-  line-height: 1.6;
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+  line-height: 1.8;
   color: #555;
 }
 
-/* Video container styling */
+/* Video Container */
 .video-container {
   position: relative;
   width: 100%;
-  max-width: 940px;
-  margin: 0 auto;
-  border: 2px solid #e9c46a; /* Accent color */
-  border-radius: 10px;
+  margin: 0 auto 30px;
+  border: none;
+  border-radius: 12px;
   overflow: hidden;
-  background: #f0f0f0;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .video-container:hover {
-  transform: scale(1.02);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transform: scale(1.03);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
 }
 
-/* Video element */
 .video-container video {
   width: 100%;
-  height: auto;
   display: block;
+  border-radius: 12px;
 }
 
-/* Canvas overlay */
+/* Canvas Overlay */
 .appcanvas {
   position: absolute;
   top: 0;
@@ -72,70 +73,66 @@ body {
   pointer-events: none;
 }
 
-/* Buttons container */
+/* Buttons Container */
 .buttons {
-  margin-top: 20px;
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 30px;
+  margin-bottom: 40px;
 }
 
-/* Button styles */
+/* Button Styles */
 .toggle-btn,
 .snapshot-btn {
-  padding: 10px 20px;
+  padding: 12px 30px;
   font-size: 1rem;
+  font-weight: 500;
   color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 30px;
   cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
+  transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
 }
 
 .toggle-btn {
-  background: #264653; /* Deep blue */
+  background: #264653;
 }
 
 .toggle-btn:hover {
   background: #1d3557;
-  transform: scale(1.05);
-}
-
-.toggle-btn:active {
-  transform: scale(0.98);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .snapshot-btn {
-  background: #e76f51; /* Warm coral */
+  background: #e76f51;
 }
 
 .snapshot-btn:hover {
   background: #d65a3b;
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-.snapshot-btn:active {
-  transform: scale(0.98);
-}
-
-/* Snapshot container */
+/* Snapshot Container */
 .snapshot-container {
-  margin-top: 30px;
-  padding: 20px;
+  padding: 30px;
   border: 2px solid #2a9d8f;
-  border-radius: 10px;
+  border-radius: 12px;
   background: #f9f9f9;
+  text-align: center;
 }
 
 .snapshot-container h2 {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   color: #2a9d8f;
+  font-size: 1.8rem;
 }
 
 .snapshot-img {
   max-width: 100%;
   height: auto;
-  border-radius: 5px;
+  border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
@@ -145,23 +142,24 @@ body {
   padding: 15px 0;
   text-align: center;
   color: #fff;
-  margin-top: 40px;
+  margin-top: 50px;
+  font-size: 0.9rem;
 }
 
-/* Responsive adjustments */
+/* Responsive Adjustments */
 @media (max-width: 768px) {
   .myapp {
-    padding: 10px;
+    margin: 20px;
+    padding: 15px;
   }
   .app-header h1 {
-    font-size: 2rem;
+    font-size: 2.2rem;
   }
   .project-description {
     font-size: 1rem;
   }
-  .toggle-btn,
-  .snapshot-btn {
+  .toggle-btn, .snapshot-btn {
+    padding: 10px 20px;
     font-size: 0.9rem;
-    padding: 8px 16px;
   }
 }
