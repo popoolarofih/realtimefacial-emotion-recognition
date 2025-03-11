@@ -8,6 +8,8 @@ function App() {
   const detectionIntervalRef = useRef<number | null>(null);
   const [isDetecting, setIsDetecting] = useState(true);
   const [snapshot, setSnapshot] = useState<string | null>(null);
+  const [finalEmotion, setFinalEmotion] = useState<string>('');
+  const [snapshotEmotion, setSnapshotEmotion] = useState<string>('');
 
   useEffect(() => {
     startVideo();
@@ -66,6 +68,16 @@ function App() {
           faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
           faceapi.draw.drawFaceExpressions(canvasRef.current, resizedDetections);
         }
+
+        // Process the first detection to extract the dominant emotion
+        if (detections.length > 0) {
+          const expressions = detections[0].expressions;
+          const sorted = Object.entries(expressions).sort((a, b) => b[1] - a[1]);
+          const primaryEmotion = sorted[0][0];
+          setFinalEmotion(`You are (${primaryEmotion})`);
+        } else {
+          setFinalEmotion('No face detected');
+        }
       }
     }, 1000);
   };
@@ -93,7 +105,7 @@ function App() {
     }
   };
 
-  // Capture a snapshot from the video feed
+  // Capture a snapshot from the video feed and detect its emotion
   const takeSnapshot = () => {
     if (videoRef.current) {
       const video = videoRef.current;
@@ -105,8 +117,29 @@ function App() {
         tempCtx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
         const dataUrl = tempCanvas.toDataURL('image/png');
         setSnapshot(dataUrl);
+        detectSnapshotEmotion(dataUrl);
       }
     }
+  };
+
+  // Detect emotion from the snapshot image
+  const detectSnapshotEmotion = (dataUrl: string) => {
+    const img = new Image();
+    img.src = dataUrl;
+    img.crossOrigin = "anonymous";
+    img.onload = async () => {
+      const detection = await faceapi.detectSingleFace(
+        img,
+        new faceapi.TinyFaceDetectorOptions()
+      ).withFaceExpressions();
+      if (detection && detection.expressions) {
+        const sorted = Object.entries(detection.expressions).sort((a, b) => b[1] - a[1]);
+        const primaryEmotion = sorted[0][0];
+        setSnapshotEmotion(`Snapshot Emotion: You are (${primaryEmotion})`);
+      } else {
+        setSnapshotEmotion('No face detected in snapshot');
+      }
+    };
   };
 
   return (
@@ -136,10 +169,15 @@ function App() {
             Take Snapshot
           </button>
         </div>
+        <div className="results">
+          <h2>Realtime Emotion:</h2>
+          <p>{finalEmotion}</p>
+        </div>
         {snapshot && (
           <div className="snapshot-container">
             <h2>Snapshot</h2>
             <img src={snapshot} alt="Snapshot" className="snapshot-img" />
+            <p>{snapshotEmotion}</p>
           </div>
         )}
       </div>
